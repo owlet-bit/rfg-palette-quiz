@@ -206,8 +206,8 @@ st.markdown("""
         background: linear-gradient(170deg, #2C3E50 0%, #3D4852 50%, #2D3A3A 100%);
     }
     
-    /* All text defaults - but not icons */
-    .stApp h1, .stApp h2, .stApp h3, .stApp p, .stApp span:not([data-icon]), .stApp label, .stMarkdown {
+    /* Headers only get custom font */
+    .main-header, .sub-header, .season-name {
         font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
     }
     
@@ -228,11 +228,9 @@ st.markdown("""
         font-style: italic;
     }
     
-    /* Subheaders in the app */
+    /* Subheaders in the app - but not font to preserve icons */
     .stApp h2, .stApp h3 {
         color: #F5F0EB !important;
-        font-family: 'Cormorant Garamond', Georgia, serif;
-        font-weight: 400;
     }
     
     /* Regular text */
@@ -279,7 +277,6 @@ st.markdown("""
         border: none !important;
         border-radius: 8px;
         padding: 0.5em 1em;
-        font-family: 'Cormorant Garamond', Georgia, serif;
         letter-spacing: 0.05em;
         transition: all 0.3s;
     }
@@ -302,14 +299,14 @@ st.markdown("""
         letter-spacing: 0.1em;
     }
     
-    /* Expander */
+    /* Expander - preserve icon fonts */
     [data-testid="stExpander"] {
         background-color: rgba(74, 85, 104, 0.4) !important;
         border: 1px solid rgba(154, 143, 191, 0.15) !important;
         border-radius: 8px;
     }
     
-    [data-testid="stExpander"] summary {
+    [data-testid="stExpander"] summary span {
         color: #F5F0EB !important;
     }
     
