@@ -195,154 +195,27 @@ st.set_page_config(
 )
 
 
-# Custom CSS for styling - matches intake form aesthetic
+# Custom CSS for styling
 st.markdown("""
 <style>
-    /* Import Google Font as fallback */
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
-    
-    /* Main app background */
+    /* Dark background */
     .stApp {
         background: linear-gradient(170deg, #2C3E50 0%, #3D4852 50%, #2D3A3A 100%);
     }
     
-    /* Global font for all text */
-    .stApp * {
-        font-family: Georgia, serif;
-    }
-    
-    /* Preserve icon fonts */
-    .stApp svg, .stApp [data-testid*="Icon"], .stApp [class*="icon"] {
-        font-family: inherit;
-    }
-    
-    /* Headers only get custom font */
-    .main-header, .sub-header, .season-name {
-        font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-    }
-    
-    /* Headers */
     .main-header {
         text-align: center;
-        color: #F5F0EB !important;
+        color: #F5F0EB;
         font-size: 2.5em;
         margin-bottom: 0.2em;
-        font-family: 'Cormorant Garamond', Georgia, serif;
-        font-weight: 400;
     }
     .sub-header {
         text-align: center;
-        color: #D8D0C8 !important;
+        color: #D8D0C8;
         font-size: 1.2em;
         margin-bottom: 2em;
         font-style: italic;
     }
-    
-    /* Subheaders in the app */
-    .stApp h2, .stApp h3, h2, h3, .stMarkdown h2, .stMarkdown h3, [data-testid="stMarkdownContainer"] h2, [data-testid="stMarkdownContainer"] h3 {
-        color: #F5F0EB !important;
-        font-family: Georgia, serif !important;
-    }
-    
-    /* Form labels */
-    .stSelectbox label p, .stTextInput label p, .stTextArea label p, .stFileUploader label p {
-        font-family: Georgia, serif !important;
-    }
-    
-    /* Expander text */
-    [data-testid="stExpander"] p, [data-testid="stExpander"] span:not([data-testid]) {
-        font-family: Georgia, serif !important;
-    }
-    
-    /* Regular text */
-    .stApp p, .stApp li {
-        color: #D8D0C8 !important;
-        font-family: Georgia, serif !important;
-    }
-    
-    /* Labels - aggressive targeting */
-    .stSelectbox label, .stTextInput label, .stTextArea label, .stFileUploader label,
-    [data-testid="stWidgetLabel"], [data-testid="stWidgetLabel"] p {
-        color: #9A8FBF !important;
-        font-size: 0.9rem;
-        letter-spacing: 0.05em;
-        font-family: Georgia, serif !important;
-    }
-    
-    /* Selectbox styling */
-    .stSelectbox > div > div {
-        background-color: rgba(0, 0, 0, 0.3) !important;
-        border: 1px solid rgba(154, 143, 191, 0.3) !important;
-        border-radius: 8px;
-        color: #F5F0EB !important;
-        font-family: Georgia, serif !important;
-    }
-    
-    .stSelectbox > div > div:hover {
-        border-color: #9A8FBF !important;
-    }
-    
-    /* Text inputs */
-    .stTextInput > div > div > input, .stTextArea > div > div > textarea {
-        background-color: rgba(0, 0, 0, 0.3) !important;
-        border: 1px solid rgba(154, 143, 191, 0.3) !important;
-        border-radius: 8px;
-        color: #F5F0EB !important;
-        font-family: Georgia, serif !important;
-    }
-    
-    .stTextInput > div > div > input:focus, .stTextArea > div > div > textarea:focus {
-        border-color: #9A8FBF !important;
-        box-shadow: 0 0 0 3px rgba(154, 143, 191, 0.3) !important;
-    }
-    
-    /* Buttons */
-    .stButton > button {
-        background: linear-gradient(135deg, #9A8FBF, #6B9B8A) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 8px;
-        padding: 0.5em 1em;
-        letter-spacing: 0.05em;
-        transition: all 0.3s;
-        font-family: Georgia, serif !important;
-    }
-    
-    .stButton > button:hover {
-        transform: scale(1.02);
-        box-shadow: 0 4px 20px rgba(154, 143, 191, 0.4) !important;
-    }
-    
-    /* Progress bar */
-    .stProgress > div > div > div > div {
-        background: linear-gradient(to right, #6B9B8A, #9A8FBF) !important;
-    }
-    
-    .progress-text {
-        text-align: center;
-        color: #A0A5AB !important;
-        font-size: 0.85em;
-        margin-bottom: 0.5em;
-        letter-spacing: 0.1em;
-    }
-    
-    /* Expander - preserve icon fonts */
-    [data-testid="stExpander"] {
-        background-color: rgba(74, 85, 104, 0.4) !important;
-        border: 1px solid rgba(154, 143, 191, 0.15) !important;
-        border-radius: 8px;
-    }
-    
-    [data-testid="stExpander"] summary span {
-        color: #F5F0EB !important;
-    }
-    
-    [data-testid="stExpander"] div[data-testid="stExpanderDetails"] {
-        background-color: rgba(74, 85, 104, 0.2) !important;
-        color: #D8D0C8 !important;
-    }
-    
-    /* Season result card */
     .season-result {
         background: linear-gradient(135deg, rgba(74, 85, 104, 0.6), rgba(44, 62, 80, 0.8));
         border: 1px solid rgba(154, 143, 191, 0.3);
@@ -354,90 +227,16 @@ st.markdown("""
     }
     .season-name {
         font-size: 2em;
-        font-weight: 400;
+        font-weight: bold;
         margin-bottom: 0.5em;
-        font-family: 'Cormorant Garamond', Georgia, serif;
         color: #F5F0EB;
     }
-    
-    /* Confidence badges */
     .confidence-badge {
         background: rgba(255,255,255,0.2);
         padding: 0.5em 1em;
         border-radius: 20px;
         display: inline-block;
     }
-    .confidence-high {
-        background: linear-gradient(135deg, #6B9B8A, #4a7c6f);
-        color: white;
-        padding: 0.5em 1em;
-        border-radius: 20px;
-        display: inline-block;
-        font-weight: 600;
-    }
-    .confidence-medium {
-        background: linear-gradient(135deg, #9A8FBF, #7a6f9f);
-        color: white;
-        padding: 0.5em 1em;
-        border-radius: 20px;
-        display: inline-block;
-        font-weight: 600;
-    }
-    .confidence-low {
-        background: linear-gradient(135deg, #C48B9F, #a46b7f);
-        color: white;
-        padding: 0.5em 1em;
-        border-radius: 20px;
-        display: inline-block;
-        font-weight: 600;
-    }
-    
-    /* Info/Success/Warning boxes */
-    .stAlert > div {
-        background-color: rgba(74, 85, 104, 0.4) !important;
-        border: 1px solid rgba(154, 143, 191, 0.3) !important;
-        color: #F5F0EB !important;
-        border-radius: 8px;
-    }
-    
-    /* File uploader */
-    .stFileUploader > div {
-        background-color: rgba(0, 0, 0, 0.2) !important;
-        border: 2px dashed rgba(154, 143, 191, 0.3) !important;
-        border-radius: 12px;
-    }
-    
-    /* Download button */
-    .stDownloadButton > button {
-        background: rgba(107, 155, 138, 0.3) !important;
-        border: 1px solid #6B9B8A !important;
-        color: #F5F0EB !important;
-    }
-    
-    /* Form styling */
-    [data-testid="stForm"] {
-        background-color: rgba(74, 85, 104, 0.3) !important;
-        border: 1px solid rgba(154, 143, 191, 0.2) !important;
-        border-radius: 12px;
-        padding: 1.5em;
-    }
-    
-    /* Divider */
-    hr {
-        border-color: rgba(154, 143, 191, 0.2) !important;
-    }
-    
-    /* Link styling */
-    a {
-        color: #9A8FBF !important;
-    }
-    
-    /* Caption text */
-    .stCaption, small {
-        color: #A0A5AB !important;
-    }
-    
-    /* Color palette chips */
     .color-chip {
         display: inline-block;
         width: 30px;
@@ -447,29 +246,48 @@ st.markdown("""
         vertical-align: middle;
         border: 2px solid rgba(154, 143, 191, 0.3);
     }
-    
-    /* Make help icons more visible */
-    [data-testid="stTooltipIcon"] {
-        color: #9A8FBF !important;
-        opacity: 1 !important;
+    .progress-text {
+        text-align: center;
+        color: #A0A5AB;
+        font-size: 0.9em;
+        margin-bottom: 0.5em;
     }
     
-    /* Target help icons more aggressively */
-    .stTooltipIcon, svg[data-testid="stTooltipIcon"], button[kind="tooltip"] svg {
-        color: #9A8FBF !important;
+    /* Confidence badges */
+    .confidence-high {
+        background: linear-gradient(135deg, #6B9B8A, #4a7c6f);
+        color: white;
+        padding: 0.5em 1em;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: bold;
+    }
+    .confidence-medium {
+        background: linear-gradient(135deg, #9A8FBF, #7a6f9f);
+        color: white;
+        padding: 0.5em 1em;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: bold;
+    }
+    .confidence-low {
+        background: linear-gradient(135deg, #C48B9F, #a46b7f);
+        color: white;
+        padding: 0.5em 1em;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: bold;
+    }
+    
+    /* Progress bar */
+    .stProgress > div > div > div > div {
+        background: linear-gradient(to right, #6B9B8A, #9A8FBF);
+    }
+    
+    /* Make help icons visible */
+    [data-testid="stTooltipIcon"] svg {
         fill: #9A8FBF !important;
-        opacity: 1 !important;
     }
-    
-    /* Also target by class patterns Streamlit uses */
-    [class*="Tooltip"] svg, [class*="tooltip"] svg {
-        fill: #9A8FBF !important;
-        color: #9A8FBF !important;
-    }
-    
-    /* Hide Streamlit branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
