@@ -206,6 +206,16 @@ st.markdown("""
         background: linear-gradient(170deg, #2C3E50 0%, #3D4852 50%, #2D3A3A 100%);
     }
     
+    /* Global font for all text */
+    .stApp * {
+        font-family: Georgia, serif;
+    }
+    
+    /* Preserve icon fonts */
+    .stApp svg, .stApp [data-testid*="Icon"], .stApp [class*="icon"] {
+        font-family: inherit;
+    }
+    
     /* Headers only get custom font */
     .main-header, .sub-header, .season-name {
         font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
@@ -228,8 +238,8 @@ st.markdown("""
         font-style: italic;
     }
     
-    /* Subheaders in the app - but not font to preserve icons */
-    .stApp h2, .stApp h3 {
+    /* Subheaders in the app */
+    .stApp h2, .stApp h3, h2, h3, .stMarkdown h2, .stMarkdown h3, [data-testid="stMarkdownContainer"] h2, [data-testid="stMarkdownContainer"] h3 {
         color: #F5F0EB !important;
         font-family: Georgia, serif !important;
     }
@@ -250,8 +260,9 @@ st.markdown("""
         font-family: Georgia, serif !important;
     }
     
-    /* Labels */
-    .stSelectbox label, .stTextInput label, .stTextArea label, .stFileUploader label {
+    /* Labels - aggressive targeting */
+    .stSelectbox label, .stTextInput label, .stTextArea label, .stFileUploader label,
+    [data-testid="stWidgetLabel"], [data-testid="stWidgetLabel"] p {
         color: #9A8FBF !important;
         font-size: 0.9rem;
         letter-spacing: 0.05em;
@@ -441,6 +452,19 @@ st.markdown("""
     [data-testid="stTooltipIcon"] {
         color: #9A8FBF !important;
         opacity: 1 !important;
+    }
+    
+    /* Target help icons more aggressively */
+    .stTooltipIcon, svg[data-testid="stTooltipIcon"], button[kind="tooltip"] svg {
+        color: #9A8FBF !important;
+        fill: #9A8FBF !important;
+        opacity: 1 !important;
+    }
+    
+    /* Also target by class patterns Streamlit uses */
+    [class*="Tooltip"] svg, [class*="tooltip"] svg {
+        fill: #9A8FBF !important;
+        color: #9A8FBF !important;
     }
     
     /* Hide Streamlit branding */
