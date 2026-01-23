@@ -372,18 +372,21 @@ def main():
     if 'favorite_colors' not in st.session_state:
         st.session_state.favorite_colors = []
     
-    # Calculate progress (quiz questions + photo sampling)
+    # Calculate progress (quiz questions only)
     quiz_answered = len([q for q in all_questions if q in st.session_state.answers])
     photo_complete = all([st.session_state.iris_color, st.session_state.hair_color, st.session_state.skin_color])
     
-    # Total steps: 12 quiz questions + 1 photo step
-    total_steps = len(all_questions) + 1
-    completed_steps = quiz_answered + (1 if photo_complete else 0)
-    progress = completed_steps / total_steps
-    
-    # Show progress indicator
-    st.markdown(f'<p class="progress-text">Step {completed_steps} of {total_steps}</p>', unsafe_allow_html=True)
-    st.progress(progress)
+    # Show progress indicator only during quiz phase
+    if quiz_answered < len(all_questions):
+        total_steps = len(all_questions)
+        st.markdown(f'<p class="progress-text">Step {quiz_answered} of {total_steps}</p>', unsafe_allow_html=True)
+        st.progress(quiz_answered / total_steps)
+    elif not photo_complete:
+        st.markdown(f'<p class="progress-text">Quiz complete! Final step: Photo sampling</p>', unsafe_allow_html=True)
+        st.progress(1.0)
+    else:
+        st.markdown(f'<p class="progress-text">✨ All steps complete!</p>', unsafe_allow_html=True)
+        st.progress(1.0)
     st.markdown("---")
     
     # Questions section
