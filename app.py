@@ -388,7 +388,8 @@ def main():
             ["blue", "green", "brown", "hazel"],
             key="eye_color_select",
             index=None,
-            placeholder="Select..."
+            placeholder="Select...",
+            help="Your dominant eye color in natural light"
         )
         if eye_color is not None:
             st.session_state.answers['eye_color'] = eye_color
@@ -398,7 +399,8 @@ def main():
             ["blonde", "light brown", "dark brown", "black", "red"],
             key="hair_color_select",
             index=None,
-            placeholder="Select..."
+            placeholder="Select...",
+            help="Your natural color, not dyed"
         )
         if hair_color is not None:
             st.session_state.answers['hair_color'] = hair_color
@@ -408,7 +410,8 @@ def main():
             ["warm", "cool", "neutral"],
             key="skin_tone_select",
             index=None,
-            placeholder="Select..."
+            placeholder="Select...",
+            help="Warm = golden/peachy undertones, Cool = pink/blue undertones"
         )
         if skin_tone is not None:
             st.session_state.answers['skin_tone'] = skin_tone
@@ -418,7 +421,8 @@ def main():
             ["gold", "silver", "both"],
             key="jewelry_select",
             index=None,
-            placeholder="Select..."
+            placeholder="Select...",
+            help="Which metal makes your skin glow?"
         )
         if jewelry is not None:
             st.session_state.answers['jewelry'] = jewelry
@@ -428,7 +432,8 @@ def main():
             ["blue", "green", "blue-green", "purple"],
             key="veins_select",
             index=None,
-            placeholder="Select..."
+            placeholder="Select...",
+            help="Look at your inner wrist in natural light"
         )
         if veins is not None:
             st.session_state.answers['veins'] = veins
@@ -450,7 +455,8 @@ def main():
             ["high", "low"],
             key="contrast_select",
             index=None,
-            placeholder="Select..."
+            placeholder="Select...",
+            help="High = dark hair + light skin or vice versa"
         )
         if contrast is not None:
             st.session_state.answers['contrast'] = contrast
@@ -471,7 +477,8 @@ def main():
             ["optic", "soft", "cream"],
             key="white_test_select",
             index=None,
-            placeholder="Select..."
+            placeholder="Select...",
+            help="Optic = bright white, Soft = off-white, Cream = warm ivory"
         )
         if white_test is not None:
             st.session_state.answers['white_test'] = white_test
@@ -506,7 +513,8 @@ def main():
             key="best_comp_select",
             index=None,
             placeholder="Select...",
-            format_func=format_option
+            format_func=format_option,
+            help="Which color gets you the most 'you look great!' comments?"
         )
         if best_comp is not None:
             st.session_state.answers['best_comp'] = best_comp
@@ -536,11 +544,20 @@ def main():
             st.subheader("📸 Photo Color Sampling")
             st.write("**Final step!** Upload a selfie and sample your iris, hair, and skin colors.")
             st.caption("Good lighting, no makeup ideal. This helps validate your quiz results.")
+            st.info("📱 **On mobile?** Photo sampling works best on desktop where you can click precisely. You can also complete this step later.")
             
             uploaded_file = st.file_uploader("Upload a photo", type=["jpg", "jpeg", "png"], key="selfie_upload")
             
             if uploaded_file:
                 image = Image.open(uploaded_file)
+                
+                st.write("**How to sample:**")
+                st.markdown("""
+                1. Select what you're sampling (Iris, Hair, or Skin) using the buttons below
+                2. Click directly on that area in your photo
+                3. The color will be captured automatically
+                4. Use the Redo button if you need to resample
+                """)
                 
                 # Mode selector buttons
                 st.write("**What are you sampling?**")
@@ -564,11 +581,28 @@ def main():
                 
                 st.info(f"👆 Click on the image to sample your **{st.session_state.picking_mode}** color")
                 
+                # Resize image for better mobile experience (max 400px wide)
+                max_width = 400
+                if image.width > max_width:
+                    ratio = max_width / image.width
+                    new_height = int(image.height * ratio)
+                    display_image = image.resize((max_width, new_height))
+                else:
+                    display_image = image
+                
                 # Display image and get click coordinates
-                coords = streamlit_image_coordinates(image, key=f"photo_{uploaded_file.name}")
+                coords = streamlit_image_coordinates(display_image, key=f"photo_{uploaded_file.name}")
                 
                 if coords:
-                    x, y = coords["x"], coords["y"]
+                    # Scale coordinates back to original image size
+                    scale = image.width / display_image.width
+                    x = int(coords["x"] * scale)
+                    y = int(coords["y"] * scale)
+                    
+                    # Make sure we're within bounds
+                    x = min(x, image.width - 1)
+                    y = min(y, image.height - 1)
+                    
                     rgb = image.getpixel((x, y))
                     if len(rgb) == 4:
                         rgb = rgb[:3]
