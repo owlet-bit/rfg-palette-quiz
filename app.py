@@ -372,21 +372,9 @@ def main():
     if 'favorite_colors' not in st.session_state:
         st.session_state.favorite_colors = []
     
-    # Calculate progress (quiz questions only)
-    quiz_answered = len([q for q in all_questions if q in st.session_state.answers])
-    photo_complete = all([st.session_state.iris_color, st.session_state.hair_color, st.session_state.skin_color])
-    
-    # Show progress indicator only during quiz phase
-    if quiz_answered < len(all_questions):
-        total_steps = len(all_questions)
-        st.markdown(f'<p class="progress-text">Step {quiz_answered} of {total_steps}</p>', unsafe_allow_html=True)
-        st.progress(quiz_answered / total_steps)
-    elif not photo_complete:
-        st.markdown(f'<p class="progress-text">Quiz complete! Final step: Photo sampling</p>', unsafe_allow_html=True)
-        st.progress(1.0)
-    else:
-        st.markdown(f'<p class="progress-text">✨ All steps complete!</p>', unsafe_allow_html=True)
-        st.progress(1.0)
+    # Create placeholder for progress bar (will update after selectboxes)
+    progress_placeholder = st.empty()
+    progress_bar_placeholder = st.empty()
     st.markdown("---")
     
     # Questions section
@@ -526,6 +514,18 @@ def main():
     # RECALCULATE progress after all selectboxes have run
     quiz_answered = len([q for q in all_questions if q in st.session_state.answers])
     photo_complete = all([st.session_state.iris_color, st.session_state.hair_color, st.session_state.skin_color])
+    
+    # NOW update the progress bar with accurate count
+    if quiz_answered < len(all_questions):
+        total_steps = len(all_questions)
+        progress_placeholder.markdown(f'<p class="progress-text">Step {quiz_answered} of {total_steps}</p>', unsafe_allow_html=True)
+        progress_bar_placeholder.progress(quiz_answered / total_steps)
+    elif not photo_complete:
+        progress_placeholder.markdown(f'<p class="progress-text">Quiz complete! Final step: Photo sampling</p>', unsafe_allow_html=True)
+        progress_bar_placeholder.progress(1.0)
+    else:
+        progress_placeholder.markdown(f'<p class="progress-text">✨ All steps complete!</p>', unsafe_allow_html=True)
+        progress_bar_placeholder.progress(1.0)
     
     # ===== PHOTO SAMPLING SECTION (Required Step) =====
     # Show after quiz questions are complete
