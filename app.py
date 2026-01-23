@@ -54,7 +54,7 @@ def save_to_google_sheets(booking_data):
         # Set up credentials
         scope = ['https://spreadsheets.google.com/feeds',
                  'https://www.googleapis.com/auth/drive']
-        creds = ServiceAccountCredentials.from_json_keyfile_name('service_account.json', scope)
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["gcp_service_account"], scope)
         client = gspread.authorize(creds)
         
         # Open the sheet
@@ -201,26 +201,13 @@ st.markdown("""
     /* Import Google Font as fallback */
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
     
-    /* Root variables */
-    :root {
-        --bg-deep: #2C3E50;
-        --bg-surface: #3D4852;
-        --surface-bone: #F5F0EB;
-        --surface-warm: #D8D0C8;
-        --text-muted: #A0A5AB;
-        --accent-lavender: #9A8FBF;
-        --accent-jade: #6B9B8A;
-        --accent-rose: #C48B9F;
-        --glow: rgba(154, 143, 191, 0.3);
-    }
-    
     /* Main app background */
     .stApp {
         background: linear-gradient(170deg, #2C3E50 0%, #3D4852 50%, #2D3A3A 100%);
     }
     
-    /* All text defaults */
-    .stApp, .stApp p, .stApp span, .stApp label, .stApp div {
+    /* All text defaults - but not icons */
+    .stApp h1, .stApp h2, .stApp h3, .stApp p, .stApp span:not([data-icon]), .stApp label, .stMarkdown {
         font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
     }
     
@@ -258,7 +245,6 @@ st.markdown("""
         color: #9A8FBF !important;
         font-size: 0.9rem;
         letter-spacing: 0.05em;
-        text-transform: uppercase;
     }
     
     /* Selectbox styling */
@@ -303,16 +289,6 @@ st.markdown("""
         box-shadow: 0 4px 20px rgba(154, 143, 191, 0.4) !important;
     }
     
-    /* Primary buttons (like the sampling mode buttons) */
-    .stButton > button[kind="primary"] {
-        background: linear-gradient(135deg, #9A8FBF, #6B9B8A) !important;
-    }
-    
-    .stButton > button[kind="secondary"] {
-        background: rgba(0, 0, 0, 0.3) !important;
-        border: 1px solid rgba(154, 143, 191, 0.3) !important;
-    }
-    
     /* Progress bar */
     .stProgress > div > div > div > div {
         background: linear-gradient(to right, #6B9B8A, #9A8FBF) !important;
@@ -327,16 +303,18 @@ st.markdown("""
     }
     
     /* Expander */
-    .streamlit-expanderHeader {
+    [data-testid="stExpander"] {
         background-color: rgba(74, 85, 104, 0.4) !important;
         border: 1px solid rgba(154, 143, 191, 0.15) !important;
         border-radius: 8px;
+    }
+    
+    [data-testid="stExpander"] summary {
         color: #F5F0EB !important;
     }
     
-    .streamlit-expanderContent {
+    [data-testid="stExpander"] div[data-testid="stExpanderDetails"] {
         background-color: rgba(74, 85, 104, 0.2) !important;
-        border: 1px solid rgba(154, 143, 191, 0.15) !important;
         color: #D8D0C8 !important;
     }
     
@@ -349,7 +327,6 @@ st.markdown("""
         border-radius: 12px;
         text-align: center;
         margin: 2em 0;
-        backdrop-filter: blur(10px);
     }
     .season-name {
         font-size: 2em;
@@ -360,6 +337,12 @@ st.markdown("""
     }
     
     /* Confidence badges */
+    .confidence-badge {
+        background: rgba(255,255,255,0.2);
+        padding: 0.5em 1em;
+        border-radius: 20px;
+        display: inline-block;
+    }
     .confidence-high {
         background: linear-gradient(135deg, #6B9B8A, #4a7c6f);
         color: white;
@@ -386,41 +369,18 @@ st.markdown("""
     }
     
     /* Info/Success/Warning boxes */
-    .stAlert {
+    .stAlert > div {
         background-color: rgba(74, 85, 104, 0.4) !important;
         border: 1px solid rgba(154, 143, 191, 0.3) !important;
         color: #F5F0EB !important;
         border-radius: 8px;
     }
     
-    /* Success message */
-    .element-container .stSuccess {
-        background-color: rgba(107, 155, 138, 0.2) !important;
-        border-left: 4px solid #6B9B8A !important;
-    }
-    
-    /* Warning message */
-    .element-container .stWarning {
-        background-color: rgba(196, 139, 159, 0.2) !important;
-        border-left: 4px solid #C48B9F !important;
-    }
-    
-    /* Info message */
-    .element-container .stInfo {
-        background-color: rgba(154, 143, 191, 0.2) !important;
-        border-left: 4px solid #9A8FBF !important;
-    }
-    
     /* File uploader */
-    .stFileUploader {
+    .stFileUploader > div {
         background-color: rgba(0, 0, 0, 0.2) !important;
         border: 2px dashed rgba(154, 143, 191, 0.3) !important;
         border-radius: 12px;
-        padding: 1em;
-    }
-    
-    .stFileUploader:hover {
-        border-color: #9A8FBF !important;
     }
     
     /* Download button */
@@ -430,12 +390,8 @@ st.markdown("""
         color: #F5F0EB !important;
     }
     
-    .stDownloadButton > button:hover {
-        background: rgba(107, 155, 138, 0.5) !important;
-    }
-    
     /* Form styling */
-    .stForm {
+    [data-testid="stForm"] {
         background-color: rgba(74, 85, 104, 0.3) !important;
         border: 1px solid rgba(154, 143, 191, 0.2) !important;
         border-radius: 12px;
@@ -452,24 +408,10 @@ st.markdown("""
         color: #9A8FBF !important;
     }
     
-    a:hover {
-        color: #6B9B8A !important;
-    }
-    
     /* Caption text */
     .stCaption, small {
         color: #A0A5AB !important;
     }
-    
-    /* Help tooltip icon */
-    .stTooltipIcon {
-        color: #9A8FBF !important;
-    }
-    
-    /* Hide Streamlit branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
     
     /* Color palette chips */
     .color-chip {
@@ -481,6 +423,10 @@ st.markdown("""
         vertical-align: middle;
         border: 2px solid rgba(154, 143, 191, 0.3);
     }
+    
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
