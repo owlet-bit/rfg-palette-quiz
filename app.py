@@ -203,6 +203,11 @@ st.markdown("""
         background: linear-gradient(170deg, #2C3E50 0%, #3D4852 50%, #2D3A3A 100%);
     }
     
+    /* Force light text on all Streamlit elements */
+    .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp p, .stApp span, .stApp label, .stApp div {
+        color: #F5F0EB !important;
+    }
+    
     .main-header {
         text-align: center;
         color: #F5F0EB;
@@ -284,9 +289,30 @@ st.markdown("""
         background: linear-gradient(to right, #6B9B8A, #9A8FBF);
     }
     
+    /* Selectbox dark styling */
+    .stSelectbox > div > div {
+        background-color: rgba(0, 0, 0, 0.3) !important;
+        border: 1px solid rgba(154, 143, 191, 0.3) !important;
+        color: #F5F0EB !important;
+    }
+    
+    /* Text inputs dark styling */
+    .stTextInput > div > div > input, .stTextArea > div > div > textarea {
+        background-color: rgba(0, 0, 0, 0.3) !important;
+        border: 1px solid rgba(154, 143, 191, 0.3) !important;
+        color: #F5F0EB !important;
+    }
+    
     /* Make help icons visible */
     [data-testid="stTooltipIcon"] svg {
         fill: #9A8FBF !important;
+    }
+    
+    /* Buttons */
+    .stButton > button {
+        background: linear-gradient(135deg, #9A8FBF, #6B9B8A) !important;
+        color: white !important;
+        border: none !important;
     }
 </style>
 """, unsafe_allow_html=True)
