@@ -231,11 +231,23 @@ st.markdown("""
     /* Subheaders in the app - but not font to preserve icons */
     .stApp h2, .stApp h3 {
         color: #F5F0EB !important;
+        font-family: Georgia, serif !important;
+    }
+    
+    /* Form labels */
+    .stSelectbox label p, .stTextInput label p, .stTextArea label p, .stFileUploader label p {
+        font-family: Georgia, serif !important;
+    }
+    
+    /* Expander text */
+    [data-testid="stExpander"] p, [data-testid="stExpander"] span:not([data-testid]) {
+        font-family: Georgia, serif !important;
     }
     
     /* Regular text */
     .stApp p, .stApp li {
         color: #D8D0C8 !important;
+        font-family: Georgia, serif !important;
     }
     
     /* Labels */
@@ -243,6 +255,7 @@ st.markdown("""
         color: #9A8FBF !important;
         font-size: 0.9rem;
         letter-spacing: 0.05em;
+        font-family: Georgia, serif !important;
     }
     
     /* Selectbox styling */
@@ -251,6 +264,7 @@ st.markdown("""
         border: 1px solid rgba(154, 143, 191, 0.3) !important;
         border-radius: 8px;
         color: #F5F0EB !important;
+        font-family: Georgia, serif !important;
     }
     
     .stSelectbox > div > div:hover {
@@ -263,6 +277,7 @@ st.markdown("""
         border: 1px solid rgba(154, 143, 191, 0.3) !important;
         border-radius: 8px;
         color: #F5F0EB !important;
+        font-family: Georgia, serif !important;
     }
     
     .stTextInput > div > div > input:focus, .stTextArea > div > div > textarea:focus {
@@ -279,6 +294,7 @@ st.markdown("""
         padding: 0.5em 1em;
         letter-spacing: 0.05em;
         transition: all 0.3s;
+        font-family: Georgia, serif !important;
     }
     
     .stButton > button:hover {
@@ -419,6 +435,12 @@ st.markdown("""
         margin-right: 10px;
         vertical-align: middle;
         border: 2px solid rgba(154, 143, 191, 0.3);
+    }
+    
+    /* Make help icons more visible */
+    [data-testid="stTooltipIcon"] {
+        color: #9A8FBF !important;
+        opacity: 1 !important;
     }
     
     /* Hide Streamlit branding */
