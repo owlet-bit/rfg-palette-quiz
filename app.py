@@ -308,8 +308,8 @@ st.markdown("""
         fill: #9A8FBF !important;
     }
     
-    /* Buttons */
-    .stButton > button {
+    /* ALL buttons */
+    .stButton > button, .stDownloadButton > button, .stFormSubmitButton > button, button {
         background: linear-gradient(135deg, #9A8FBF, #6B9B8A) !important;
         color: white !important;
         border: none !important;
@@ -325,6 +325,13 @@ st.markdown("""
         background: linear-gradient(135deg, #9A8FBF, #6B9B8A) !important;
         color: white !important;
         border: none !important;
+    }
+    
+    /* Form inputs need dark background */
+    input, textarea {
+        background-color: rgba(0, 0, 0, 0.3) !important;
+        color: #F5F0EB !important;
+        border: 1px solid rgba(154, 143, 191, 0.3) !important;
     }
 </style>
 """, unsafe_allow_html=True)
