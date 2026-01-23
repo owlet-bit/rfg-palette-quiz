@@ -314,6 +314,18 @@ st.markdown("""
         color: white !important;
         border: none !important;
     }
+    
+    /* File uploader */
+    .stFileUploader > div {
+        background-color: rgba(0, 0, 0, 0.3) !important;
+        border: 2px dashed rgba(154, 143, 191, 0.5) !important;
+    }
+    
+    .stFileUploader button {
+        background: linear-gradient(135deg, #9A8FBF, #6B9B8A) !important;
+        color: white !important;
+        border: none !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
