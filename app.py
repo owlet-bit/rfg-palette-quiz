@@ -54,7 +54,7 @@ def save_to_google_sheets(booking_data):
         # Set up credentials
         scope = ['https://spreadsheets.google.com/feeds',
                  'https://www.googleapis.com/auth/drive']
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["gcp_service_account"], scope)
+        creds = ServiceAccountCredentials.from_json_keyfile_name('service_account.json', scope)
         client = gspread.authorize(creds)
         
         # Open the sheet
@@ -195,40 +195,283 @@ st.set_page_config(
 )
 
 
-# Custom CSS for styling
+# Custom CSS for styling - matches intake form aesthetic
 st.markdown("""
 <style>
+    /* Import Google Font as fallback */
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+    
+    /* Root variables */
+    :root {
+        --bg-deep: #2C3E50;
+        --bg-surface: #3D4852;
+        --surface-bone: #F5F0EB;
+        --surface-warm: #D8D0C8;
+        --text-muted: #A0A5AB;
+        --accent-lavender: #9A8FBF;
+        --accent-jade: #6B9B8A;
+        --accent-rose: #C48B9F;
+        --glow: rgba(154, 143, 191, 0.3);
+    }
+    
+    /* Main app background */
+    .stApp {
+        background: linear-gradient(170deg, #2C3E50 0%, #3D4852 50%, #2D3A3A 100%);
+    }
+    
+    /* All text defaults */
+    .stApp, .stApp p, .stApp span, .stApp label, .stApp div {
+        font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    }
+    
+    /* Headers */
     .main-header {
         text-align: center;
-        color: #2c3e50;
+        color: #F5F0EB !important;
         font-size: 2.5em;
         margin-bottom: 0.2em;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-weight: 400;
     }
     .sub-header {
         text-align: center;
-        color: #7f8c8d;
+        color: #D8D0C8 !important;
         font-size: 1.2em;
         margin-bottom: 2em;
+        font-style: italic;
     }
+    
+    /* Subheaders in the app */
+    .stApp h2, .stApp h3 {
+        color: #F5F0EB !important;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-weight: 400;
+    }
+    
+    /* Regular text */
+    .stApp p, .stApp li {
+        color: #D8D0C8 !important;
+    }
+    
+    /* Labels */
+    .stSelectbox label, .stTextInput label, .stTextArea label, .stFileUploader label {
+        color: #9A8FBF !important;
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+    
+    /* Selectbox styling */
+    .stSelectbox > div > div {
+        background-color: rgba(0, 0, 0, 0.3) !important;
+        border: 1px solid rgba(154, 143, 191, 0.3) !important;
+        border-radius: 8px;
+        color: #F5F0EB !important;
+    }
+    
+    .stSelectbox > div > div:hover {
+        border-color: #9A8FBF !important;
+    }
+    
+    /* Text inputs */
+    .stTextInput > div > div > input, .stTextArea > div > div > textarea {
+        background-color: rgba(0, 0, 0, 0.3) !important;
+        border: 1px solid rgba(154, 143, 191, 0.3) !important;
+        border-radius: 8px;
+        color: #F5F0EB !important;
+    }
+    
+    .stTextInput > div > div > input:focus, .stTextArea > div > div > textarea:focus {
+        border-color: #9A8FBF !important;
+        box-shadow: 0 0 0 3px rgba(154, 143, 191, 0.3) !important;
+    }
+    
+    /* Buttons */
+    .stButton > button {
+        background: linear-gradient(135deg, #9A8FBF, #6B9B8A) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px;
+        padding: 0.5em 1em;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        letter-spacing: 0.05em;
+        transition: all 0.3s;
+    }
+    
+    .stButton > button:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 20px rgba(154, 143, 191, 0.4) !important;
+    }
+    
+    /* Primary buttons (like the sampling mode buttons) */
+    .stButton > button[kind="primary"] {
+        background: linear-gradient(135deg, #9A8FBF, #6B9B8A) !important;
+    }
+    
+    .stButton > button[kind="secondary"] {
+        background: rgba(0, 0, 0, 0.3) !important;
+        border: 1px solid rgba(154, 143, 191, 0.3) !important;
+    }
+    
+    /* Progress bar */
+    .stProgress > div > div > div > div {
+        background: linear-gradient(to right, #6B9B8A, #9A8FBF) !important;
+    }
+    
+    .progress-text {
+        text-align: center;
+        color: #A0A5AB !important;
+        font-size: 0.85em;
+        margin-bottom: 0.5em;
+        letter-spacing: 0.1em;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        background-color: rgba(74, 85, 104, 0.4) !important;
+        border: 1px solid rgba(154, 143, 191, 0.15) !important;
+        border-radius: 8px;
+        color: #F5F0EB !important;
+    }
+    
+    .streamlit-expanderContent {
+        background-color: rgba(74, 85, 104, 0.2) !important;
+        border: 1px solid rgba(154, 143, 191, 0.15) !important;
+        color: #D8D0C8 !important;
+    }
+    
+    /* Season result card */
     .season-result {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: linear-gradient(135deg, rgba(74, 85, 104, 0.6), rgba(44, 62, 80, 0.8));
+        border: 1px solid rgba(154, 143, 191, 0.3);
+        color: #F5F0EB;
         padding: 2em;
-        border-radius: 10px;
+        border-radius: 12px;
         text-align: center;
         margin: 2em 0;
+        backdrop-filter: blur(10px);
     }
     .season-name {
         font-size: 2em;
-        font-weight: bold;
+        font-weight: 400;
         margin-bottom: 0.5em;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        color: #F5F0EB;
     }
-    .confidence-badge {
-        background: rgba(255,255,255,0.2);
+    
+    /* Confidence badges */
+    .confidence-high {
+        background: linear-gradient(135deg, #6B9B8A, #4a7c6f);
+        color: white;
         padding: 0.5em 1em;
         border-radius: 20px;
         display: inline-block;
+        font-weight: 600;
     }
+    .confidence-medium {
+        background: linear-gradient(135deg, #9A8FBF, #7a6f9f);
+        color: white;
+        padding: 0.5em 1em;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: 600;
+    }
+    .confidence-low {
+        background: linear-gradient(135deg, #C48B9F, #a46b7f);
+        color: white;
+        padding: 0.5em 1em;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: 600;
+    }
+    
+    /* Info/Success/Warning boxes */
+    .stAlert {
+        background-color: rgba(74, 85, 104, 0.4) !important;
+        border: 1px solid rgba(154, 143, 191, 0.3) !important;
+        color: #F5F0EB !important;
+        border-radius: 8px;
+    }
+    
+    /* Success message */
+    .element-container .stSuccess {
+        background-color: rgba(107, 155, 138, 0.2) !important;
+        border-left: 4px solid #6B9B8A !important;
+    }
+    
+    /* Warning message */
+    .element-container .stWarning {
+        background-color: rgba(196, 139, 159, 0.2) !important;
+        border-left: 4px solid #C48B9F !important;
+    }
+    
+    /* Info message */
+    .element-container .stInfo {
+        background-color: rgba(154, 143, 191, 0.2) !important;
+        border-left: 4px solid #9A8FBF !important;
+    }
+    
+    /* File uploader */
+    .stFileUploader {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        border: 2px dashed rgba(154, 143, 191, 0.3) !important;
+        border-radius: 12px;
+        padding: 1em;
+    }
+    
+    .stFileUploader:hover {
+        border-color: #9A8FBF !important;
+    }
+    
+    /* Download button */
+    .stDownloadButton > button {
+        background: rgba(107, 155, 138, 0.3) !important;
+        border: 1px solid #6B9B8A !important;
+        color: #F5F0EB !important;
+    }
+    
+    .stDownloadButton > button:hover {
+        background: rgba(107, 155, 138, 0.5) !important;
+    }
+    
+    /* Form styling */
+    .stForm {
+        background-color: rgba(74, 85, 104, 0.3) !important;
+        border: 1px solid rgba(154, 143, 191, 0.2) !important;
+        border-radius: 12px;
+        padding: 1.5em;
+    }
+    
+    /* Divider */
+    hr {
+        border-color: rgba(154, 143, 191, 0.2) !important;
+    }
+    
+    /* Link styling */
+    a {
+        color: #9A8FBF !important;
+    }
+    
+    a:hover {
+        color: #6B9B8A !important;
+    }
+    
+    /* Caption text */
+    .stCaption, small {
+        color: #A0A5AB !important;
+    }
+    
+    /* Help tooltip icon */
+    .stTooltipIcon {
+        color: #9A8FBF !important;
+    }
+    
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* Color palette chips */
     .color-chip {
         display: inline-block;
         width: 30px;
@@ -236,44 +479,7 @@ st.markdown("""
         border-radius: 5px;
         margin-right: 10px;
         vertical-align: middle;
-        border: 2px solid #ddd;
-    }
-    .progress-text {
-        text-align: center;
-        color: #666;
-        font-size: 0.9em;
-        margin-bottom: 0.5em;
-    }
-    
-    /* NEW: Color-coded confidence badges */
-    .confidence-high {
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        color: white;
-        padding: 0.5em 1em;
-        border-radius: 20px;
-        display: inline-block;
-        font-weight: bold;
-    }
-    .confidence-medium {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
-        padding: 0.5em 1em;
-        border-radius: 20px;
-        display: inline-block;
-        font-weight: bold;
-    }
-    .confidence-low {
-        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        color: white;
-        padding: 0.5em 1em;
-        border-radius: 20px;
-        display: inline-block;
-        font-weight: bold;
-    }
-    
-    /* Better Streamlit overrides */
-    .stProgress > div > div > div > div {
-        background: linear-gradient(to right, #667eea, #764ba2);
+        border: 2px solid rgba(154, 143, 191, 0.3);
     }
 </style>
 """, unsafe_allow_html=True)
